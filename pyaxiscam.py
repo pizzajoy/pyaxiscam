@@ -43,11 +43,13 @@ class AxisCam:
 
         :return http status code, image:
         """
+        img=Image.new('RGB', (600,400),0)
         r = requests.get(self.base_url + 'jpg/image.cgi')
         print('Return status: ' + str(r.status_code))
         if r.status_code == 200:
             f = io.BytesIO(r.content)
             img = Image.open(f)
+        else: print("Error getting the image ",r.status_code)
         return r.status_code, img
 
     def display_live_image(self):
@@ -55,13 +57,9 @@ class AxisCam:
 
         :return http status code:
         """
-        r = requests.get(self.base_url + 'jpg/image.cgi')
-        print('Return status: ' + str(r.status_code))
-        if r.status_code == 200:
-            f = io.BytesIO(r.content)
-            img = Image.open(f)
-            img.show()
-        return r.status_code
+        status_code,img=self.get_live_image()
+        img.show()
+        return status_code, img
 
 
         # TODO
